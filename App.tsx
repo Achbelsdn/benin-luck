@@ -113,12 +113,12 @@ const MainContent = () => {
 
       {/* Navigation */}
       <nav className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 border-b ${winner ? 'mt-12' : 'mt-0'} bg-white/80 dark:bg-[#050505]/80 backdrop-blur-xl border-slate-200 dark:border-white/10 shadow-sm`}>
-        <div className="max-w-7xl mx-auto px-6 h-24 flex justify-between items-center">
-             <div className="flex items-center gap-4 group cursor-default">
-                 <LuxuryLogo />
+        <div className="max-w-7xl mx-auto px-4 md:px-6 h-24 flex justify-between items-center">
+             <div className="flex items-center gap-3 md:gap-4 group cursor-default">
+                 <div className="scale-75 md:scale-100 origin-left"><LuxuryLogo /></div>
                  <div>
-                     <h1 className="text-2xl font-serif font-black text-slate-900 dark:text-white leading-none tracking-tight group-hover:text-brand-500 transition-colors">Bénin Luck</h1>
-                     <p className="text-[10px] text-slate-500 dark:text-slate-400 uppercase tracking-[0.2em] font-bold mt-1">Loterie Prestige</p>
+                     <h1 className="text-xl md:text-2xl font-serif font-black text-slate-900 dark:text-white leading-none tracking-tight group-hover:text-brand-500 transition-colors">Bénin Luck</h1>
+                     <p className="text-[9px] md:text-[10px] text-slate-500 dark:text-slate-400 uppercase tracking-[0.2em] font-bold mt-1">Loterie Prestige</p>
                  </div>
              </div>
              
@@ -156,7 +156,7 @@ const MainContent = () => {
         </div>
       </nav>
 
-      <main className={`max-w-7xl mx-auto px-6 pt-36 space-y-32 ${winner ? 'pt-48' : ''}`}>
+      <main className={`max-w-7xl mx-auto px-4 md:px-6 pt-36 space-y-32 ${winner ? 'pt-48' : ''}`}>
         
         {isAdmin ? (
             <AdminPanel />
@@ -164,21 +164,21 @@ const MainContent = () => {
             <>
                 {/* Modern Hero Section */}
                 <RevealOnScroll>
-                    <section className="relative rounded-[3rem] bg-[#0a0a0a] overflow-hidden min-h-[600px] flex items-center p-8 md:p-20 shadow-2xl border border-white/10 ring-1 ring-white/5">
+                    <section className="relative rounded-[2rem] md:rounded-[3rem] bg-[#0a0a0a] overflow-hidden min-h-[500px] md:min-h-[600px] flex items-center p-6 md:p-20 shadow-2xl border border-white/10 ring-1 ring-white/5">
                         {/* Premium Gradients */}
                         <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-brand-500 rounded-full mix-blend-opacity filter blur-[150px] opacity-20 animate-pulse-slow"></div>
                         <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-indigo-600 rounded-full mix-blend-opacity filter blur-[150px] opacity-20"></div>
                         <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-[0.03]"></div>
 
-                        <div className="relative z-10 w-full grid lg:grid-cols-2 gap-16 items-center">
-                            <div className="space-y-10 text-center lg:text-left">
+                        <div className="relative z-10 w-full grid lg:grid-cols-2 gap-10 md:gap-16 items-center">
+                            <div className="space-y-8 md:space-y-10 text-center lg:text-left">
                                 
                                 <div className="inline-flex items-center gap-3 bg-white/5 backdrop-blur-md border border-white/10 rounded-full pl-2 pr-6 py-2 text-brand-200 text-sm font-bold animate-float shadow-lg shadow-black/20">
                                     <span className="bg-brand-500 text-white p-1 rounded-full"><Sparkles size={12} fill="currentColor"/></span>
                                     <span>L'Art de la Fortune</span>
                                 </div>
                                 
-                                <h2 className="text-6xl md:text-8xl font-serif font-black text-white leading-[0.9] tracking-tighter drop-shadow-2xl">
+                                <h2 className="text-5xl md:text-8xl font-serif font-black text-white leading-[0.9] tracking-tighter drop-shadow-2xl break-words">
                                     Osez <br/>
                                     <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-300 via-emerald-200 to-brand-400 animate-shine bg-[length:200%_100%]">
                                         L'Exception
@@ -188,16 +188,15 @@ const MainContent = () => {
                                 {/* PRIZE & VALUE DISPLAY */}
                                 <div className="mt-8 mb-8 relative group">
                                     <div className="absolute inset-0 bg-gradient-to-r from-brand-500 to-emerald-500 rounded-2xl blur opacity-20 group-hover:opacity-30 transition-opacity"></div>
-                                    <div className="relative bg-white/5 backdrop-blur-xl border border-white/10 p-6 rounded-2xl flex items-center gap-5 max-w-xl mx-auto lg:mx-0">
+                                    <div className="relative bg-white/5 backdrop-blur-xl border border-white/10 p-6 rounded-2xl flex flex-col md:flex-row items-center gap-5 max-w-xl mx-auto lg:mx-0">
                                         <div className="shrink-0 w-16 h-16 bg-gradient-to-br from-brand-400 to-emerald-600 rounded-xl flex items-center justify-center shadow-lg shadow-brand-500/20 text-white">
                                             <Gift size={32} />
                                         </div>
-                                        <div className="text-left">
+                                        <div className="text-center md:text-left">
                                             <div className="text-brand-300 font-bold text-xs uppercase tracking-widest mb-1">Lot en Jeu</div>
                                             <div className="text-2xl font-serif font-black text-white leading-none mb-2">{config?.prize_title || "Lot Spécial"}</div>
-                                            <div className="inline-flex items-center gap-2 text-sm text-slate-300">
-                                                <span>Valeur :</span>
-                                                <span className="font-mono font-bold text-brand-400 bg-brand-400/10 px-2 py-0.5 rounded border border-brand-400/20">{config?.prize_value || "Inestimable"}</span>
+                                            <div className="inline-flex items-center justify-center md:justify-start gap-2 text-sm text-slate-300">
+                                                <span>Valeur :</span>                                                <span className="font-mono font-bold text-brand-400 bg-brand-400/10 px-2 py-0.5 rounded border border-brand-400/20">{config?.prize_value || "Inestimable"}</span>
                                             </div>
                                         </div>
                                     </div>
@@ -205,7 +204,7 @@ const MainContent = () => {
 
                                 {/* Dates Display Logic */}
                                 <div className="flex flex-col gap-2 max-w-lg mx-auto lg:mx-0">
-                                    {/* 1. Date de fin du prix actuel (Si pas de gagnant encore ET qu'il y a un titre de prix configuré) */}
+                                    {/* 1. Date de fin du prix actuel */}
                                     {!winner && config?.prize_title && config?.prize_end_date && (
                                         <div className="inline-flex items-center gap-3 bg-red-500/10 border border-red-500/30 px-4 py-2 rounded-xl backdrop-blur-sm self-center lg:self-start animate-pulse">
                                             <Clock size={16} className="text-red-400" />
@@ -215,8 +214,8 @@ const MainContent = () => {
                                         </div>
                                     )}
 
-                                    {/* 2. Date du prochain prix (Si gagnant déclaré OU champs de prix vides) */}
-                                    {(winner || !config?.prize_title) && config?.next_prize_start_date && (
+                                    {/* 2. Date du prochain prix */}
+                                    {!config?.prize_title && config?.next_prize_start_date && (
                                         <div className="inline-flex items-center gap-3 bg-emerald-500/20 border border-emerald-500/30 px-6 py-3 rounded-xl backdrop-blur-md self-center lg:self-start mt-4 shadow-lg shadow-emerald-500/10 transform hover:scale-105 transition-transform">
                                             <CalendarClock size={24} className="text-emerald-400" />
                                             <div className="text-left">
@@ -229,7 +228,7 @@ const MainContent = () => {
                                     )}
                                 </div>
                                 
-                                <p className="text-slate-400 text-xl md:text-2xl max-w-lg mx-auto lg:mx-0 leading-relaxed font-light tracking-wide mt-6">
+                                <p className="text-slate-400 text-lg md:text-2xl max-w-lg mx-auto lg:mx-0 leading-relaxed font-light tracking-wide mt-6">
                                     Une expérience de loterie réinventée.
                                     <span className="block mt-4 text-white font-medium">Entrée : <span className="font-bold text-brand-400 text-3xl align-middle ml-2">{TICKET_PRICE} F</span></span>
                                 </p>
@@ -266,8 +265,8 @@ const MainContent = () => {
                 {/* Steps Section */}
                 <section>
                     <RevealOnScroll delay={100}>
-                        <div className="text-center mb-20">
-                            <h3 className="text-4xl font-serif font-black text-slate-900 dark:text-white mb-6">L'Excellence Simplifiée</h3>
+                        <div className="text-center mb-16 md:mb-20">
+                            <h3 className="text-3xl md:text-4xl font-serif font-black text-slate-900 dark:text-white mb-6">L'Excellence Simplifiée</h3>
                             <p className="text-slate-500 dark:text-slate-400 max-w-xl mx-auto text-lg">Trois étapes vers votre destinée.</p>
                         </div>
                     </RevealOnScroll>
@@ -305,16 +304,16 @@ const MainContent = () => {
                 {/* Ticket Grid Section */}
                 <section className="scroll-mt-32 pb-20" id="tickets">
                     <RevealOnScroll delay={100}>
-                        <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-8">
+                        <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 md:mb-12 gap-6 md:gap-8">
                             <div>
-                                <h3 className="text-4xl font-serif font-black text-slate-900 dark:text-white flex items-center gap-4">
+                                <h3 className="text-3xl md:text-4xl font-serif font-black text-slate-900 dark:text-white flex items-center gap-4">
                                     <span className="bg-brand-100 dark:bg-brand-900/20 p-3 rounded-2xl text-brand-600 dark:text-brand-400 rotate-3 shadow-lg shadow-brand-500/10"><Gift size={32} /></span>
                                     La Grille Officielle
                                 </h3>
-                                <p className="text-slate-500 dark:text-slate-400 mt-4 text-xl font-light">Votre futur commence ici.</p>
+                                <p className="text-slate-500 dark:text-slate-400 mt-4 text-lg md:text-xl font-light">Votre futur commence ici.</p>
                             </div>
                             
-                            <div className="flex flex-wrap gap-6 text-sm font-bold bg-white dark:bg-[#1a1a1a] px-8 py-4 rounded-2xl shadow-xl shadow-black/5 border border-slate-100 dark:border-white/5">
+                            <div className="flex flex-wrap gap-4 md:gap-6 text-xs md:text-sm font-bold bg-white dark:bg-[#1a1a1a] px-6 py-4 rounded-2xl shadow-xl shadow-black/5 border border-slate-100 dark:border-white/5">
                                 <LegendItem color="bg-white dark:bg-[#1a1a1a] border-2 border-slate-200 dark:border-white/20" label="Libre" />
                                 <LegendItem color="bg-amber-100 dark:bg-amber-900/20 border-2 border-amber-200 dark:border-amber-700/50" label="En Cours" />
                                 <LegendItem color="bg-slate-100 dark:bg-slate-800 border-2 border-slate-200 dark:border-slate-700" label="Vendu" />
@@ -323,7 +322,7 @@ const MainContent = () => {
                     </RevealOnScroll>
                     
                     <RevealOnScroll delay={300}>
-                        <div className="grid grid-cols-5 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 gap-4 sm:gap-6 p-8 md:p-12 bg-slate-100/50 dark:bg-[#0f0f0f] rounded-[3rem] border border-slate-200 dark:border-white/5 shadow-inner">
+                        <div className="grid grid-cols-3 min-[400px]:grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 gap-3 md:gap-6 p-4 md:p-12 bg-slate-100/50 dark:bg-[#0f0f0f] rounded-[2rem] md:rounded-[3rem] border border-slate-200 dark:border-white/5 shadow-inner">
                             {tickets.map(ticket => (
                                 <TicketCard 
                                     key={ticket.id} 
@@ -347,7 +346,6 @@ const MainContent = () => {
             </div>
             
             <div className="text-slate-400 text-sm font-medium flex flex-col md:flex-row items-center gap-8">
-                {/* Updated Year to 2025 */}
                 <span>© 2025 Prestige Edition • Bénin</span>
                 <div className="flex gap-6">
                     <button onClick={() => setShowDevModal(true)} className="hover:text-brand-500 transition-colors">Développeurs</button>
@@ -396,10 +394,9 @@ const Badge = ({ icon, text }: any) => (
 );
 
 const StepCard = ({ number, title, desc, icon }: any) => (
-    <div className="relative z-10 bg-white dark:bg-[#1a1a1a] p-10 rounded-[2.5rem] shadow-[0_20px_60px_-15px_rgba(0,0,0,0.05)] border border-slate-100 dark:border-white/5 hover:border-brand-200 dark:hover:border-brand-900/30 transition-all hover:-translate-y-2 group">
+    <div className="relative z-10 bg-white dark:bg-[#1a1a1a] p-8 md:p-10 rounded-[2.5rem] shadow-[0_20px_60px_-15px_rgba(0,0,0,0.05)] border border-slate-100 dark:border-white/5 hover:border-brand-200 dark:hover:border-brand-900/30 transition-all hover:-translate-y-2 group">
         <div className="w-16 h-16 bg-slate-50 dark:bg-white/5 rounded-2xl flex items-center justify-center mb-8 group-hover:scale-110 transition-transform duration-300 border border-slate-100 dark:border-white/5">
-            {icon}
-        </div>
+            {icon}        </div>
         <div className="text-5xl font-serif font-black text-slate-100 dark:text-white/5 absolute top-8 right-8 select-none">{number}</div>
         <h4 className="text-2xl font-bold text-slate-900 dark:text-white mb-4">{title}</h4>
         <p className="text-slate-500 dark:text-slate-400 leading-relaxed font-medium">{desc}</p>
@@ -407,8 +404,8 @@ const StepCard = ({ number, title, desc, icon }: any) => (
 );
 
 const LegendItem = ({ color, label }: any) => (
-    <div className="flex items-center gap-3">
-        <span className={`w-5 h-5 rounded-lg shadow-sm ${color}`}></span>
+    <div className="flex items-center gap-2 md:gap-3">
+        <span className={`w-4 h-4 md:w-5 md:h-5 rounded-lg shadow-sm ${color}`}></span>
         <span className="text-slate-600 dark:text-slate-300 uppercase tracking-wider text-xs">{label}</span>
     </div>
 );
