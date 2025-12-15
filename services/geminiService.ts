@@ -61,7 +61,7 @@ const getLocalFallbackResponse = (message: string): string => {
   }
 
   // Default Fallback
-  return "Je suis actuellement en mode maintenance IA, mais je peux vous dire que le ticket coûte 100F et que le site est sécurisé par Achbel SODJINOU. Pour d'autres questions, contactez le support.";
+  return "Je suis actuellement en mode maintenance IA, mais je peux vous dire que le ticket coûte 100F et que le site est sécurisé par le Bureau de Développement Technique. Pour d'autres questions, contactez le support.";
 };
 
 // Chat capability
