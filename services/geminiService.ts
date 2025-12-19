@@ -1,60 +1,67 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { Ticket } from "../types"; 
 
-// --- 1. CLÉ API ---
+// --- 1. CONFIGURATION ---
 const API_KEY = import.meta.env.VITE_API_KEY;
 const genAI = API_KEY ? new GoogleGenerativeAI(API_KEY) : null;
 
-// --- 2. CONTEXTE (L'intelligence du bot) ---
-// On injecte ça directement dans le message pour être sûr que l'IA comprenne qui elle est.
-const CONTEXTE_BENIN_LUCK = `
+// Liste de tous les modèles à tester, du plus récent au plus vieux
+// Si le premier échoue, il tente le suivant automatiquement.
+const MODELS_TO_TRY = [
+  "gemini-2.0-flash",        // Ton choix (Beta)
+  "gemini-2.0-flash-exp",    // Variante expérimentale souvent requise
+  "gemini-1.5-flash",        // Le standard rapide
+  "gemini-1.5-flash-latest", // Variante
+  "gemini-pro"               // Le classique (marche toujours)
+];
+
+const CONTEXTE = `
 INSTRUCTION : Tu es l'assistant de "Bénin Luck".
-Créateur : Achbel SODJINOU (Expert sécu).
+Créateur : Achbel SODJINOU.
 Règle : Ticket à 100 FCFA.
-Ton : Sympa, tutoiement respectueux, réponses courtes (max 2 phrases).
-Si on te demande si tu es une IA, dis oui, propulsée par Google Gemini.
-Question utilisateur : 
+Ton : Sympa, court.
 `;
 
 export const getChatResponse = async (message: string): Promise<string> => {
-  if (!API_KEY) {
-    return "❌ ERREUR : Clé API manquante dans Vercel.";
-  }
+  if (!API_KEY) return "❌ Erreur : Clé API manquante.";
 
-  try {
-    // CORRECTION MAJEURE ICI : On utilise TON modèle disponible
-    // D'après ta liste, "gemini-2.0-flash" est le meilleur choix.
-    const model = genAI!.getGenerativeModel({ model: "gemini-2.0-flash" });
+  // On boucle sur la liste des modèles jusqu'à ce qu'un fonctionne
+  for (const modelName of MODELS_TO_TRY) {
+    try {
+      console.log(`Tentative avec le modèle : ${modelName}...`);
+      
+      const model = genAI!.getGenerativeModel({ model: modelName });
+      const prompt = CONTEXTE + "\nQuestion: " + message;
+      
+      const result = await model.generateContent(prompt);
+      const response = await result.response;
+      
+      // Si on arrive ici, c'est que ça a marché !
+      return response.text();
 
-    // On combine le contexte et le message de l'utilisateur
-    const promptComplet = CONTEXTE_BENIN_LUCK + message;
-
-    const result = await model.generateContent(promptComplet);
-    const response = await result.response;
-    return response.text();
-
-  } catch (error: any) {
-    console.error("ERREUR:", error);
-
-    // Si le 2.0 échoue, on tente le 2.0 Flash-Lite (aussi dans ta liste)
-    if (error.message.includes("404") || error.message.includes("not found")) {
-        try {
-            const fallback = genAI!.getGenerativeModel({ model: "gemini-2.0-flash-lite" });
-            const res = await fallback.generateContent(CONTEXTE_BENIN_LUCK + message);
-            return (await res.response).text();
-        } catch (e) {
-            return "❌ Erreur de modèle. Vérifiez que l'API Key a accès à Gemini 2.0.";
+    } catch (error: any) {
+      console.warn(`Échec avec ${modelName} :`, error.message);
+      
+      // Si c'est le dernier modèle et qu'il a échoué aussi...
+      if (modelName === MODELS_TO_TRY[MODELS_TO_TRY.length - 1]) {
+        // Analyse spécifique de l'erreur "Failed to fetch"
+        if (error.message.includes("Failed to fetch")) {
+            return "⚠️ Erreur de connexion (Failed to fetch). Désactivez votre bloqueur de pub (AdBlock) ou vérifiez votre connexion internet.";
         }
+        return `❌ Tous les modèles ont échoué. Erreur : ${error.message}`;
+      }
+      // Sinon, on continue la boucle vers le modèle suivant...
     }
-    
-    return `❌ ERREUR GOOGLE : ${error.message}`;
   }
+  
+  return "❌ Erreur inconnue.";
 };
 
+// --- Helpers ---
 export const generateWinnerAnnouncement = async (ticket: any, prizeName: string) => {
-    return `Félicitations à ${ticket.purchaser_name} qui gagne ${prizeName} ! 🎉`;
+    return `Bravo à ${ticket.purchaser_name || "l'utilisateur"} !`;
 };
 
 export const generateMarketingCopy = async (prizeName: string) => {
-  return "Tentez votre chance maintenant !";
+  return "Tentez votre chance !";
 };
