@@ -1,24 +1,24 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
-import { Ticket } from "../types"; // Assure-toi que ce fichier existe, sinon retire cette ligne
+import { Ticket } from "../types"; 
 
 // --- 1. RÉCUPÉRATION DE LA CLÉ ---
 const API_KEY = import.meta.env.VITE_API_KEY;
 
 // --- 2. CONFIGURATION DE L'IA ---
-// On initialise l'IA directement.
 const genAI = API_KEY ? new GoogleGenerativeAI(API_KEY) : null;
 
 export const getChatResponse = async (message: string): Promise<string> => {
-  // DIAGNOSTIC : Si ça s'affiche dans le chat, c'est que la clé n'est pas chargée.
+  // DIAGNOSTIC
   if (!API_KEY) {
-    console.error("ERREUR FATALE: Aucune clé API trouvée (VITE_API_KEY est vide).");
-    return "❌ ERREUR CONFIG : La clé API 'VITE_API_KEY' est introuvable dans le fichier .env ou sur Vercel.";
+    console.error("ERREUR FATALE: Aucune clé API trouvée.");
+    return "❌ ERREUR CONFIG : La clé API est manquante.";
   }
 
   try {
-    // On appelle vraiment Google ici
+    // TENTATIVE 1 : On essaie le modèle rapide (Flash)
+    // J'ai ajouté "-latest" qui règle souvent le problème de version
     const model = genAI!.getGenerativeModel({ 
-      model: "gemini-1.5-flash",
+      model: "gemini-1.5-flash-latest",
       systemInstruction: "Tu es l'assistant de Bénin Luck. Tu es cool, serviable et tu parles français. Tes réponses sont courtes."
     });
 
@@ -27,13 +27,24 @@ export const getChatResponse = async (message: string): Promise<string> => {
     return response.text();
 
   } catch (error: any) {
-    // Si Google renvoie une erreur, on l'affiche directement dans le chat pour comprendre
-    console.error("ERREUR GOOGLE:", error);
-    return `❌ ERREUR GOOGLE : ${error.message || "Erreur inconnue"}`;
+    console.warn("Erreur modèle Flash, tentative avec Gemini Pro...", error.message);
+
+    // TENTATIVE 2 (SAUVETAGE) : Si Flash plante (404), on prend le modèle standard
+    if (error.message.includes("404") || error.message.includes("not found")) {
+      try {
+        const fallbackModel = genAI!.getGenerativeModel({ model: "gemini-pro" });
+        const result = await fallbackModel.generateContent(message);
+        return (await result.response).text();
+      } catch (e) {
+        return "Je suis là, mais mes serveurs sont surchargés pour le moment. Réessayez dans une minute !";
+      }
+    }
+
+    return `❌ ERREUR GOOGLE : ${error.message}`;
   }
 };
 
-// --- Fonctions annexes (ne bloquent pas le chat) ---
+// --- Fonctions annexes ---
 export const generateWinnerAnnouncement = async (ticket: any, prizeName: string) => {
     return `Bravo à ${ticket.purchaser_name || "l'utilisateur"} pour ce lot !`;
 };
